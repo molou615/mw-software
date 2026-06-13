@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const events = [
-  { id: '1', client: 'Ahmed & Fatima', type: 'Wedding', date: '2026-06-20', venue: 'Grand Hotel Marrakech', performers: 4, status: 'Confirmed', budget: '£2,500' },
-  { id: '2', client: 'Smith Family', type: 'Birthday Party', date: '2026-06-22', venue: 'Community Center', performers: 2, status: 'Confirmed', budget: '£800' },
-  { id: '3', client: 'Corporate Event Ltd', type: 'Corporate Event', date: '2026-06-25', venue: 'Conference Hall', performers: 6, status: 'Pending', budget: '£4,200' },
-  { id: '4', client: 'Bennani Family', type: 'Henna Night', date: '2026-06-28', venue: 'Riad Palais', performers: 3, status: 'Confirmed', budget: '£1,800' },
-  { id: '5', client: 'Tech Conference', type: 'Conference', date: '2026-07-01', venue: 'Casanearshore', performers: 2, status: 'Pending', budget: '£3,500' },
+const initialEvents = [
+  { id: '1', client: 'Ahmed & Fatima', type: 'Wedding', date: '2026-06-20', venue: 'Grand Hotel Marrakech', performers: 4, status: 'Confirmed', budget: 2500 },
+  { id: '2', client: 'Smith Family', type: 'Birthday Party', date: '2026-06-22', venue: 'Community Center', performers: 2, status: 'Confirmed', budget: 800 },
+  { id: '3', client: 'Corporate Event Ltd', type: 'Corporate Event', date: '2026-06-25', venue: 'Conference Hall', performers: 6, status: 'Pending', budget: 4200 },
+  { id: '4', client: 'Bennani Family', type: 'Henna Night', date: '2026-06-28', venue: 'Riad Palais', performers: 3, status: 'Confirmed', budget: 1800 },
+  { id: '5', client: 'Tech Conference', type: 'Conference', date: '2026-07-01', venue: 'Casanearshore', performers: 2, status: 'Pending', budget: 3500 },
 ];
 
-const performers = [
+const initialPerformers = [
   { id: '1', name: 'DJ Youssef', specialty: 'DJ & Music', rating: 4.9, events: 45, available: true },
   { id: '2', name: 'Halqa Brothers', specialty: 'Traditional Entertainment', rating: 4.8, events: 32, available: true },
   { id: '3', name: 'Sarah Dance Crew', specialty: 'Belly Dance', rating: 4.7, events: 28, available: false },
@@ -19,6 +19,10 @@ const performers = [
 
 export default function HalaFlowDashboard() {
   const [tab, setTab] = useState('dashboard');
+  const [events, setEvents] = useState(initialEvents);
+  const [performers, setPerformers] = useState(initialPerformers);
+  const [showNewEvent, setShowNewEvent] = useState(false);
+  const [newEvent, setNewEvent] = useState({ client: '', type: '', date: '', venue: '', budget: '' });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,6 +35,31 @@ export default function HalaFlowDashboard() {
     navigate('/');
   };
 
+  const createEvent = () => {
+    if (!newEvent.client || !newEvent.type || !newEvent.date) {
+      alert('Please fill in client, type, and date');
+      return;
+    }
+    const event = {
+      id: String(events.length + 1),
+      client: newEvent.client,
+      type: newEvent.type,
+      date: newEvent.date,
+      venue: newEvent.venue || 'TBD',
+      performers: 0,
+      status: 'Pending',
+      budget: parseInt(newEvent.budget) || 0,
+    };
+    setEvents([...events, event]);
+    setNewEvent({ client: '', type: '', date: '', venue: '', budget: '' });
+    setShowNewEvent(false);
+    alert('Event created successfully!');
+  };
+
+  const togglePerformerAvailability = (id) => {
+    setPerformers(performers.map(p => p.id === id ? { ...p, available: !p.available } : p));
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <nav className="bg-white border-b border-gray-200 sticky top-0 z-40">
@@ -41,6 +70,9 @@ export default function HalaFlowDashboard() {
             <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded-full">DEMO</span>
           </div>
           <div className="flex items-center gap-4">
+            <button onClick={() => setShowNewEvent(true)} className="bg-rose-500 text-white px-5 py-2 rounded-xl font-bold hover:bg-rose-600 transition text-sm">
+              + New Event
+            </button>
             <button onClick={handleLogout} className="text-sm text-red-600 hover:text-red-700 font-medium">Logout</button>
           </div>
         </div>
@@ -55,14 +87,58 @@ export default function HalaFlowDashboard() {
           ))}
         </div>
 
+        {/* New Event Modal */}
+        {showNewEvent && (
+          <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm" onClick={() => setShowNewEvent(false)}>
+            <div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
+              <h2 className="text-2xl font-extrabold mb-6">Create New Event</h2>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Client Name *</label>
+                  <input type="text" value={newEvent.client} onChange={(e) => setNewEvent({ ...newEvent, client: e.target.value })} placeholder="e.g. Ahmed & Fatima" className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-rose-500 transition" />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Event Type *</label>
+                  <select value={newEvent.type} onChange={(e) => setNewEvent({ ...newEvent, type: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-rose-500 transition">
+                    <option value="">Select type</option>
+                    <option>Wedding</option>
+                    <option>Birthday Party</option>
+                    <option>Corporate Event</option>
+                    <option>Henna Night</option>
+                    <option>Conference</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Date *</label>
+                  <input type="date" value={newEvent.date} onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-rose-500 transition" />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Venue</label>
+                  <input type="text" value={newEvent.venue} onChange={(e) => setNewEvent({ ...newEvent, venue: e.target.value })} placeholder="e.g. Grand Hotel" className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-rose-500 transition" />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Budget (£)</label>
+                  <input type="number" value={newEvent.budget} onChange={(e) => setNewEvent({ ...newEvent, budget: e.target.value })} placeholder="e.g. 2500" className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-rose-500 transition" />
+                </div>
+              </div>
+              <div className="flex gap-3 mt-6">
+                <button onClick={createEvent} className="flex-1 bg-rose-500 text-white py-3 rounded-xl font-bold hover:bg-rose-600 transition">Create Event</button>
+                <button onClick={() => setShowNewEvent(false)} className="px-6 py-3 border border-gray-200 rounded-xl font-semibold hover:bg-gray-50 transition">Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Dashboard */}
         {tab === 'dashboard' && (
           <div className="space-y-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { label: 'Upcoming Events', value: '8', icon: '📅', color: 'rose' },
-                { label: 'Active Performers', value: '12', icon: '🎭', color: 'purple' },
-                { label: 'Revenue This Month', value: '£12,800', icon: '💰', color: 'green' },
-                { label: 'Client Satisfaction', value: '4.9★', icon: '⭐', color: 'orange' },
+                { label: 'Upcoming Events', value: events.length, icon: '📅' },
+                { label: 'Active Performers', value: performers.filter(p => p.available).length, icon: '🎭' },
+                { label: 'Revenue This Month', value: `£${events.reduce((sum, e) => sum + e.budget, 0).toLocaleString()}`, icon: '💰' },
+                { label: 'Client Satisfaction', value: '4.9★', icon: '⭐' },
               ].map((s, i) => (
                 <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                   <div className="text-2xl mb-2">{s.icon}</div>
@@ -81,7 +157,7 @@ export default function HalaFlowDashboard() {
                       <div className="text-sm text-gray-500">{e.type} • {e.date}</div>
                     </div>
                     <div className="text-right">
-                      <div className="font-bold text-gray-900">{e.budget}</div>
+                      <div className="font-bold">£{e.budget.toLocaleString()}</div>
                       <span className={`text-xs font-bold px-2 py-1 rounded-lg ${e.status === 'Confirmed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
                         {e.status}
                       </span>
@@ -93,6 +169,7 @@ export default function HalaFlowDashboard() {
           </div>
         )}
 
+        {/* Events */}
         {tab === 'events' && (
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             <table className="w-full">
@@ -113,7 +190,7 @@ export default function HalaFlowDashboard() {
                     <td className="px-6 py-4 text-gray-600">{e.type}</td>
                     <td className="px-6 py-4 text-gray-600">{e.date}</td>
                     <td className="px-6 py-4 text-gray-600">{e.venue}</td>
-                    <td className="px-6 py-4 font-bold">{e.budget}</td>
+                    <td className="px-6 py-4 font-bold">£{e.budget.toLocaleString()}</td>
                     <td className="px-6 py-4">
                       <span className={`text-xs font-bold px-2 py-1 rounded-lg ${e.status === 'Confirmed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
                         {e.status}
@@ -126,15 +203,16 @@ export default function HalaFlowDashboard() {
           </div>
         )}
 
+        {/* Performers */}
         {tab === 'performers' && (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {performers.map(p => (
               <div key={p.id} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition">
                 <div className="flex items-center justify-between mb-4">
                   <div className="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center text-xl">🎭</div>
-                  <span className={`text-xs font-bold px-2 py-1 rounded-lg ${p.available ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                  <button onClick={() => togglePerformerAvailability(p.id)} className={`text-xs font-bold px-2 py-1 rounded-lg transition ${p.available ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-red-100 text-red-700 hover:bg-red-200'}`}>
                     {p.available ? 'Available' : 'Busy'}
-                  </span>
+                  </button>
                 </div>
                 <h3 className="font-bold text-lg">{p.name}</h3>
                 <p className="text-sm text-gray-500 mb-3">{p.specialty}</p>
