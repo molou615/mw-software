@@ -592,17 +592,17 @@ export default function Landing() {
             <div>
               <h4 className="font-bold text-gray-900 mb-4">Legal</h4>
               <ul className="space-y-2 text-sm text-gray-500">
-                <li><a href="#" className="hover:text-gray-900 transition">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-gray-900 transition">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-gray-900 transition">Refund Policy</a></li>
+                <li><Link to="/privacy" className="hover:text-gray-900 transition">Privacy Policy</Link></li>
+                <li><Link to="/terms" className="hover:text-gray-900 transition">Terms of Service</Link></li>
+                <li><Link to="/terms" className="hover:text-gray-900 transition">Refund Policy</Link></li>
               </ul>
             </div>
           </div>
           <div className="pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-sm text-gray-500">© 2026 MW Software. All rights reserved.</div>
             <div className="flex gap-6 text-sm text-gray-500">
-              <a href="#" className="hover:text-gray-900 transition">Privacy</a>
-              <a href="#" className="hover:text-gray-900 transition">Terms</a>
+              <Link to="/privacy" className="hover:text-gray-900 transition">Privacy</Link>
+              <Link to="/terms" className="hover:text-gray-900 transition">Terms</Link>
               <a href="#contact" className="hover:text-gray-900 transition">Contact</a>
             </div>
           </div>
