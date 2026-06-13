@@ -2,6 +2,8 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Landing from './pages/Landing';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
+import Login from './pages/Login';
+import Documents from './pages/Documents';
 
 export default function App() {
   return (
@@ -9,6 +11,8 @@ export default function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
       <Route path="/terms" element={<TermsOfService />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/documents" element={<Documents />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
