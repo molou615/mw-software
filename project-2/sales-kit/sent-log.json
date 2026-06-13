@@ -1,0 +1,17 @@
+{
+  "info@premierfit.co.uk": { "gym": "Premier Fit Gym", "firstSent": "2026-06-12T12:00:00.000Z" },
+  "hello@theironworks.co.uk": { "gym": "The Iron Works", "firstSent": "2026-06-12T12:00:00.000Z" },
+  "contact@fitzone.co.uk": { "gym": "FitZone Gym", "firstSent": "2026-06-12T12:00:00.000Z" },
+  "info@bodyshape.co.uk": { "gym": "BodyShape Fitness", "firstSent": "2026-06-12T12:00:00.000Z" },
+  "contact@peakperformance.co.uk": { "gym": "Peak Performance", "firstSent": "2026-06-12T12:00:00.000Z" },
+  "info@flexfitness.co.uk": { "gym": "Flex Fitness", "firstSent": "2026-06-12T12:00:00.000Z" },
+  "hello@powerhouse.co.uk": { "gym": "PowerHouse Gym", "firstSent": "2026-06-12T12:00:00.000Z" },
+  "contact@corefit.co.uk": { "gym": "CoreFit Studio", "firstSent": "2026-06-12T12:00:00.000Z" },
+  "info@strongholdgym.co.uk": { "gym": "StrongHold Gym", "firstSent": "2026-06-12T12:00:00.000Z" },
+  "hello@vitagym.co.uk": { "gym": "Vita Gym", "firstSent": "2026-06-12T12:00:00.000Z" },
+  "info@elevatefitness.co.uk": { "gym": "Elevate Fitness", "firstSent": "2026-06-12T12:00:00.000Z" },
+  "contact@revolvegym.co.uk": { "gym": "Revolve Gym", "firstSent": "2026-06-12T12:00:00.000Z" },
+  "info@pinnaclefit.co.uk": { "gym": "Pinnacle Fitness", "firstSent": "2026-06-12T12:00:00.000Z" },
+  "hello@groundworksgym.co.uk": { "gym": "Groundworks Gym", "firstSent": "2026-06-12T12:00:00.000Z" },
+  "info@forgefitness.co.uk": { "gym": "Forge Fitness", "firstSent": "2026-06-12T12:00:00.000Z" }
+}

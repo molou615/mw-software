@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  password  String
+  phone     String?
+  role      Role     @default(MEMBER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  bookings  Booking[]
+}
+
+enum Role {
+  ADMIN
+  INSTRUCTOR
+  MEMBER
+}
+
+model ClassType {
+  id          Int      @id @default(autoincrement())
+  name        String
+  duration    Int      @default(60)
+  maxCapacity Int      @default(20)
+  color       String   @default("#3B82F6")
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  classes     Class[]
+}
+
+model Class {
+  id           Int       @id @default(autoincrement())
+  classTypeId  Int
+  instructorId Int
+  date         DateTime
+  startTime    String
+  endTime      String
+  maxCapacity  Int       @default(20)
+  status       ClassStatus @default(ACTIVE)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  classType    ClassType @relation(fields: [classTypeId], references: [id])
+  instructor   User      @relation(fields: [instructorId], references: [id])
+  bookings     Booking[]
+}
+
+enum ClassStatus {
+  ACTIVE
+  CANCELLED
+  COMPLETED
+}
+
+model Booking {
+  id        Int           @id @default(autoincrement())
+  memberId  Int
+  classId   Int
+  status    BookingStatus @default(CONFIRMED)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  member    User          @relation(fields: [memberId], references: [id])
+  class     Class         @relation(fields: [classId], references: [id])
+
+  @@unique([memberId, classId])
+}
+
+enum BookingStatus {
+  CONFIRMED
+  CANCELLED
+  WAITLISTED
+  ATTENDED
+  NO_SHOW
+}

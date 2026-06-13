@@ -1,0 +1,16 @@
+node_modules/
+.env
+backend/uploads/*
+!backend/uploads/.gitkeep
+frontend/dist/
+project-2/frontend/dist/
+project-3/frontend/dist/
+project-2/backend/uploads/*
+project-3/backend/uploads/*
+.DS_Store
+*.log
+.vite/
+*.sqlite
+sales-kit/node_modules/
+project-2/sales-kit/node_modules/
+project-3/sales-kit/node_modules/

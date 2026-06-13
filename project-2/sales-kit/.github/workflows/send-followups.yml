@@ -1,0 +1,35 @@
+name: Send Follow-Ups
+
+on:
+  schedule:
+    - cron: '0 10 * * *'
+  workflow_dispatch:
+
+jobs:
+  send-followups:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install nodemailer imap mailparser
+
+      - name: Send follow-ups
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: node send-followups.js
+
+      - name: Commit updated log
+        run: |
+          git config user.name "Follow-Up Bot"
+          git config user.email "bot@gymflow.app"
+          git add sent-log.json
+          git diff --staged --quiet || git commit -m "Update follow-up log"
+          git push

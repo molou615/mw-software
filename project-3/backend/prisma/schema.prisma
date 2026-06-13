@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  password  String
+  phone     String?
+  role      Role     @default(CLIENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  bookings  Booking[]
+  performances Performance[]
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  PERFORMER
+  CLIENT
+}
+
+model Performer {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  skills    String
+  bio       String?
+  avatar    String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id])
+  performances Performance[]
+}
+
+model Package {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  price       Float
+  duration    Int
+  maxGuests   Int?
+  features    String
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  bookings    Booking[]
+}
+
+model Booking {
+  id          Int      @id @default(autoincrement())
+  clientId    Int
+  packageId   Int
+  eventDate   DateTime
+  eventTime   String
+  duration    Int
+  venue       String
+  address     String?
+  guestCount  Int?
+  specialReqs String?
+  status      BookingStatus @default(PENDING)
+  depositPaid Float    @default(0)
+  totalPaid   Float    @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  client      User     @relation(fields: [clientId], references: [id])
+  package     Package  @relation(fields: [packageId], references: [id])
+  performances Performance[]
+  checklist   ChecklistItem[]
+  photos      Photo[]
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model Performance {
+  id          Int      @id @default(autoincrement())
+  bookingId   Int
+  performerId Int
+  role        String?
+  createdAt   DateTime @default(now())
+  booking     Booking    @relation(fields: [bookingId], references: [id])
+  performer   Performer  @relation(fields: [performerId], references: [id])
+}
+
+model ChecklistItem {
+  id          Int      @id @default(autoincrement())
+  bookingId   Int
+  title       String
+  category    String
+  completed   Boolean  @default(false)
+  dueDate     DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  booking     Booking  @relation(fields: [bookingId], references: [id])
+}
+
+model Photo {
+  id          Int      @id @default(autoincrement())
+  bookingId   Int
+  url         String
+  caption     String?
+  uploadedAt  DateTime @default(now())
+  booking     Booking  @relation(fields: [bookingId], references: [id])
+}
