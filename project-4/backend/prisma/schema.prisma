@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      String   @default("user")
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  quotes   Quote[]
+  clients  Client[]
+}
+
+model Client {
+  id        String   @id @default(uuid())
+  name      String
+  email     String?
+  phone     String?
+  address   String?
+  company   String?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  quotes Quote[]
+}
+
+model Quote {
+  id              String   @id @default(uuid())
+  quoteNumber     String   @unique
+  title           String
+  description     String?
+  status          String   @default("draft") // draft, sent, viewed, accepted, rejected, expired, invoiced
+  validUntil      DateTime
+  subtotal        Float
+  vatRate         Float    @default(20)
+  vatAmount       Float
+  total           Float
+  notes           String?
+  terms           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  clientId String
+  client   Client @relation(fields: [clientId], references: [id])
+
+  items QuoteItem[]
+
+  sentAt     DateTime?
+  viewedAt    DateTime?
+  acceptedAt  DateTime?
+  rejectedAt  DateTime?
+}
+
+model QuoteItem {
+  id          String @id @default(uuid())
+  description String
+  quantity    Float
+  unitPrice   Float
+  total       Float
+
+  quoteId String
+  quote   Quote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+}

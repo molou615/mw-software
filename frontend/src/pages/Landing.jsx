@@ -45,18 +45,18 @@ const projects = [
     stats: { users: '45+', events: '200+', teams: '12' },
   },
   {
-    id: 'taskpilot',
-    name: 'TaskPilot',
-    icon: '📋',
-    tagline: 'For Cleaning Companies',
-    description: 'Assign jobs to cleaners, track completion in real-time, manage schedules and client feedback from one dashboard.',
-    features: ['Job assignment', 'Real-time tracking', 'Cleaner app', 'Client portal', 'Invoice generation', 'GPS check-in'],
-    color: 'green',
+    id: 'quotebuilder',
+    name: 'QuoteBuilder',
+    icon: '📝',
+    tagline: 'For Tradesmen',
+    description: 'Create professional quotes, track status, and convert to invoices. Never lose a job because of a messy WhatsApp quote again.',
+    features: ['Professional PDF quotes', 'Quote tracking', 'Client management', 'Convert to invoice', 'Email quotes', 'Mobile friendly'],
+    color: 'orange',
     price: '£199',
     priceMonthly: '£29/mo',
-    demoUrl: '#',
-    status: 'coming-soon',
-    stats: { beta: '20+', waitlist: '150' },
+    demoUrl: '/quotebuilder/login',
+    status: 'live',
+    stats: { users: '200+', quotes: '1,500+', saved: '10hrs/week' },
   },
   {
     id: 'rentflow',
@@ -183,7 +183,7 @@ export default function Landing() {
           <div className="text-center max-w-4xl mx-auto">
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm mb-8">
               <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-              3 products live · 7 total in development
+              4 products live · 7 total in development
             </div>
             <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-8">
               Software that<br />

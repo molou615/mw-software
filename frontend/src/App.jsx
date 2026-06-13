@@ -8,6 +8,8 @@ import GymFlowLogin from './pages/GymFlowLogin';
 import GymFlowDashboard from './pages/GymFlowDashboard';
 import HalaFlowLogin from './pages/HalaFlowLogin';
 import HalaFlowDashboard from './pages/HalaFlowDashboard';
+import QuoteBuilderLogin from './pages/QuoteBuilderLogin';
+import QuoteBuilderDashboard from './pages/QuoteBuilderDashboard';
 
 export default function App() {
   return (
@@ -27,6 +29,10 @@ export default function App() {
       {/* Project 3 - HalaFlow */}
       <Route path="/halaflow/login" element={<HalaFlowLogin />} />
       <Route path="/halaflow/dashboard" element={<HalaFlowDashboard />} />
+
+      {/* Project 4 - QuoteBuilder */}
+      <Route path="/quotebuilder/login" element={<QuoteBuilderLogin />} />
+      <Route path="/quotebuilder/dashboard" element={<QuoteBuilderDashboard />} />
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
