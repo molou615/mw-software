@@ -1,23 +1,15 @@
-const errorHandler = (err, req, res, next) => {
-  console.error('Error:', err.message);
+module.exports = (err, req, res, next) => {
+  console.error(err.message);
 
-  if (err.name === 'PrismaClientKnownRequestError') {
-    if (err.code === 'P2002') {
-      return res.status(409).json({ message: 'A record with this value already exists' });
-    }
-    if (err.code === 'P2025') {
-      return res.status(404).json({ message: 'Record not found' });
-    }
+  if (err.type === 'entity.too.large') {
+    return res.status(413).json({ message: 'Request body too large' });
   }
 
-  if (err.name === 'ValidationError') {
+  if (err.message === 'Invalid file type. Only PDF and image files are allowed.') {
     return res.status(400).json({ message: err.message });
   }
 
-  const statusCode = err.statusCode || 500;
-  res.status(statusCode).json({
-    message: err.message || 'Internal server error',
+  res.status(err.status || 500).json({
+    message: process.env.NODE_ENV === 'production' ? 'Internal server error' : err.message,
   });
 };
-
-module.exports = errorHandler;

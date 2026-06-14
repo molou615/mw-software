@@ -29,7 +29,7 @@ function sendNotification(title, message) {
 
 function checkEmails() {
   return new Promise((resolve, reject) => {
-    const imap = new Imap({ user: GMAIL_USER, password: GMAIL_PASS, host: 'imap.gmail.com', port: 993, tls: true, tlsOptions: { rejectUnauthorized: false } });
+    const imap = new Imap({ user: GMAIL_USER, password: GMAIL_PASS, host: 'imap.gmail.com', port: 993, tls: true, tlsOptions: { rejectUnauthorized: true } });
     const found = [];
     imap.once('ready', () => {
       imap.openBox('INBOX', true, (err) => {

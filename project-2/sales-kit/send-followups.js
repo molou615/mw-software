@@ -32,7 +32,7 @@ function daysSince(dateStr) { return (new Date() - new Date(dateStr)) / (1000 * 
 
 function checkReplies(sinceDate) {
   return new Promise((resolve, reject) => {
-    const imap = new Imap({ user: GMAIL_USER, password: GMAIL_PASS, host: 'imap.gmail.com', port: 993, tls: true, tlsOptions: { rejectUnauthorized: false } });
+    const imap = new Imap({ user: GMAIL_USER, password: GMAIL_PASS, host: 'imap.gmail.com', port: 993, tls: true, tlsOptions: { rejectUnauthorized: true } });
     const replied = [];
     imap.once('ready', () => {
       imap.openBox('INBOX', true, (err) => {
