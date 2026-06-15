@@ -2,19 +2,9 @@ const Imap = require('imap');
 const { simpleParser } = require('mailparser');
 const https = require('https');
 
-const WATCHED = [
-  'info@partytimeentertainment.co.uk', 'hello@funfactoryevents.co.uk', 'contact@magicmomentparties.co.uk',
-  'info@superstarparties.co.uk', 'bookings@eventmakers.co.uk', 'info@celebrationkingdom.co.uk',
-  'hello@partypalooza.co.uk', 'contact@entertainkids.co.uk', 'info@joyfulevents.co.uk',
-  'bookings@spectacleentertainment.co.uk', 'info@kidszaparties.co.uk', 'hello@wonderevents.co.uk',
-  'contact@eventplannermarrakech.com', 'info@saeval.com', 'contact@cesar-event.com',
-  'commercial@marocanimation.com', 'contact@megaanimation-events.com', 'souad.lahcini@animatec-team.com',
-  'info@maevmaroc.com', 'contact@casaevents.ma', 'sales@traveldesigndmc.com',
-  'info@moroccoevents.com', 'hello@partymarocmarrakech.com', 'contact@mor-event.com',
-];
+const GMAIL_USER = process.env.GMAIL_USER || 'mwlwdghrby09@gmail.com';
 
 const NTFY_TOPIC = 'halaflow-replies-789';
-const GMAIL_USER = process.env.GMAIL_USER || 'mwlwdghrby09@gmail.com';
 const GMAIL_PASS = process.env.GMAIL_APP_PASSWORD || 'xrtljtwwcrpexyqf';
 
 function sendNotification(title, message) {
@@ -34,7 +24,7 @@ function checkEmails() {
     imap.once('ready', () => {
       imap.openBox('INBOX', true, (err) => {
         if (err) { imap.end(); return reject(err); }
-        imap.search(['UNSEEN'], (err, results) => {
+          imap.search(['UNSEEN'], (err, results) => {
           if (err || !results.length) { imap.end(); return resolve([]); }
           const f = imap.fetch(results, { bodies: '' });
           f.on('message', (msg) => {
@@ -43,10 +33,8 @@ function checkEmails() {
                 if (err) return;
                 if (parsed.from && parsed.from.text) {
                   const from = parsed.from.text.toLowerCase();
-                  for (const email of WATCHED) {
-                    if (from.includes(email.toLowerCase())) {
-                      found.push({ from: parsed.from.text, subject: parsed.subject, date: parsed.date, text: parsed.text?.substring(0, 500) });
-                    }
+                  if (!from.includes(GMAIL_USER.toLowerCase())) {
+                    found.push({ from: parsed.from.text, subject: parsed.subject, date: parsed.date, text: parsed.text?.substring(0, 500) });
                   }
                 }
               });
